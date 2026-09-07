@@ -164,6 +164,13 @@ input.assess-radio{
 .side.collapsed .nav button .lbl{display:none}
 .side.collapsed .nav button .dot{display:none}
 .side.collapsed .nav button{justify-content:center}
+.nav-group{display:flex;flex-direction:column}
+.nav-group .subnav{max-height:0;overflow:hidden;transition:max-height .25s ease;display:flex;flex-direction:column;gap:3px}
+.nav-group .subnav button{margin-top:3px}
+.nav-group.open .subnav,.nav-group:hover .subnav{max-height:240px}
+.side.collapsed .nav-group:hover .subnav{max-height:0}
+.grp-arrow{display:inline-block;margin-left:auto;font-size:11px;transition:transform .2s ease}
+.nav-group.open>button .grp-arrow,.nav-group:hover>button .grp-arrow{transform:rotate(90deg)}
 .nav button:hover{background:rgba(255,255,255,.09);color:#fff;transform:translateX(5px)}
 .nav button:hover .ico{transform:scale(1.18) rotate(-4deg)}
 .nav button:hover .dot{opacity:1;transform:scale(1)}
