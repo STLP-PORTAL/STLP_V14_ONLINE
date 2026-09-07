@@ -154,18 +154,27 @@ input.assess-radio{
 .nav button{
   display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:#cfe0ee;
   text-align:left;padding:11px 12px;border-radius:10px;font-weight:600;font-size:14px;position:relative;
-  transition:background .15s ease,color .15s ease;white-space:nowrap;overflow:hidden;
+  transition:background .18s ease,color .18s ease,padding-left .18s cubic-bezier(.34,1.56,.64,1),transform .15s ease;
+  white-space:nowrap;overflow:hidden;
 }
-.nav button .ico{font-size:17px;flex:0 0 22px;text-align:center}
+.nav button .ico{font-size:17px;flex:0 0 22px;text-align:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .nav button .lbl{overflow:hidden;text-overflow:ellipsis}
+.nav button .dot{width:5px;height:5px;flex:0 0 5px;border-radius:50%;background:var(--teal-400);margin-left:auto;
+  opacity:0;transform:scale(0);transition:opacity .15s ease,transform .2s cubic-bezier(.34,1.56,.64,1)}
 .side.collapsed .nav button .lbl{display:none}
+.side.collapsed .nav button .dot{display:none}
 .side.collapsed .nav button{justify-content:center}
-.nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav button:hover{background:rgba(255,255,255,.09);color:#fff;padding-left:17px;transform:translateX(1px)}
+.nav button:hover .ico{transform:scale(1.18) rotate(-4deg)}
+.nav button:hover .dot{opacity:1;transform:scale(1)}
+.nav button:active{transform:scale(.98)}
 .nav button.active{background:linear-gradient(135deg,var(--teal-600),rgba(18,151,159,.55));color:#fff;box-shadow:0 4px 14px -4px rgba(18,151,159,.6)}
 .nav button.active::before{
-  content:"";position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:4px;height:60%;
-  background:var(--amber-500);border-radius:0 4px 4px 0;
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0%;
+  background:var(--amber-500);border-radius:0 3px 3px 0;transition:height .22s cubic-bezier(.34,1.56,.64,1);
 }
+.nav button.active::before{height:60%}
+.nav button.active .dot{opacity:1;transform:scale(1);background:var(--amber-500)}
 .side.collapsed .nav button::after{
   content:attr(data-tip);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%) scale(.9);
   background:var(--navy-950);color:#fff;padding:7px 11px;border-radius:8px;font-size:12px;white-space:nowrap;
