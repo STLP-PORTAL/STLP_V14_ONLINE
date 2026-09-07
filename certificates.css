@@ -2,6 +2,67 @@
    STLP Certificates Module — certificates.css
    Isolated stylesheet, reserved for the Certificates module.
    Reuses existing global classes (.card, .tablewrap, .table, .btn,
-   .modalbg, .modal, .formgrid, .badge) — nothing overridden here yet.
-   Dashboard/filter/designer-specific styles will be added in later phases.
+   .modalbg, .modal, .formgrid, .badge) — nothing overridden here.
+   All classes below are new/scoped to certificates.js output only.
    ============================================================ */
+
+/* --- Admin sub-tabs (Templates / Dashboard) --- */
+.cert-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+
+/* --- Template Manager: card gallery --- */
+.cert-tpl-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;
+}
+.cert-tpl-card{
+  background:#fff;border:1px solid #e6e6ea;border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;transition:box-shadow .15s;
+}
+.cert-tpl-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.cert-tpl-thumb{
+  height:140px;background:#f4f5f7;display:flex;align-items:center;justify-content:center;
+  background-size:cover;background-position:center;position:relative;
+  border-bottom:1px solid #eee;
+}
+.cert-tpl-thumb .cert-tpl-filetype{
+  font-size:34px;opacity:.55;
+}
+.cert-tpl-body{padding:12px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.cert-tpl-name{font-weight:700;font-size:14.5px;margin:0}
+.cert-tpl-meta{font-size:12px;color:#767a86}
+.cert-tpl-actions{
+  display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-top:1px solid #f0f0f2;
+}
+.cert-tpl-actions .btn{padding:6px 10px;font-size:11.5px}
+
+/* --- Field position editor --- */
+.cert-pos-wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.cert-pos-stagebox{
+  width:480px;max-width:100%;border:1px solid #ddd;border-radius:8px;overflow:hidden;
+  background:#eee;flex-shrink:0;
+}
+.cert-pos-stage-outer{position:relative;overflow:hidden}
+.cert-pos-stage-inner{position:relative;transform-origin:top left}
+.cert-field-span{position:absolute;white-space:nowrap;line-height:1.1;pointer-events:none}
+.cert-pos-fields{flex:1;min-width:280px;max-height:520px;overflow-y:auto;padding-right:4px}
+.cert-pos-field-row{border:1px solid #ececef;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.cert-pos-field-row.disabled{opacity:.5}
+.cert-pos-field-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-weight:600;font-size:13px}
+.cert-pos-field-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cert-pos-field-grid label{font-size:10.5px;color:#767a86;display:block;margin-bottom:2px}
+.cert-pos-field-grid input,.cert-pos-field-grid select{width:100%;padding:5px 6px;font-size:12px}
+
+/* --- Admin Certificate Dashboard --- */
+.cert-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:18px}
+.cert-kpi-card{background:#fff;border:1px solid #e6e6ea;border-radius:12px;padding:16px}
+.cert-kpi-num{font-size:26px;font-weight:800;margin:2px 0}
+.cert-kpi-label{font-size:12px;color:#767a86}
+.cert-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.cert-filters div{display:flex;flex-direction:column;gap:4px}
+.cert-filters label{font-size:11px;color:#767a86}
+
+/* --- My Certificates (employee view) --- */
+.cert-my-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.cert-my-card{background:#fff;border:1px solid #e6e6ea;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.cert-my-card .cert-tpl-actions{padding:0;border-top:none;margin-top:6px}
