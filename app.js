@@ -361,11 +361,11 @@ function renderSideMenu(menu, admin, active){
         </button>
         ${open ? sub.map(s => `
           <button class="${active===s[0]?"active":""}" style="padding-left:34px" data-tip="${esc(s[1])}" onclick="route('${s[0]}')">
-            <span class="ico">${MENU_ICONS[s[0]]||"•"}</span><span class="lbl">${esc(s[1])}</span>
+            <span class="ico">${MENU_ICONS[s[0]]||"•"}</span><span class="lbl">${esc(s[1])}</span><span class="dot"></span>
           </button>`).join("") : ""}
       `;
     }
-    return `<button class="${active===key?"active":""}" data-tip="${esc(label)}" onclick="route('${key}')"><span class="ico">${MENU_ICONS[key]||"•"}</span><span class="lbl">${esc(label)}</span>${key==="sop"&&admin?'<span class="badge o" id="sopNavBadge" style="display:none;margin-left:auto"></span>':""}</button>`;
+    return `<button class="${active===key?"active":""}" data-tip="${esc(label)}" onclick="route('${key}')"><span class="ico">${MENU_ICONS[key]||"•"}</span><span class="lbl">${esc(label)}</span>${key==="sop"&&admin?'<span class="badge o" id="sopNavBadge" style="display:none;margin-left:auto"></span>':'<span class="dot"></span>'}</button>`;
   }).join("")}</div>`;
 }
 
