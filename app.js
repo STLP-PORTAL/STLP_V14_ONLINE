@@ -355,18 +355,14 @@ function renderSideMenu(menu, admin, active){
       const openState = _sideGroupOpen[key];
       const open = (openState === null || openState === undefined) ? isActiveGroup : openState;
       return `
-        <div class="nav-group${open?" open":""}">
-          <button class="${isActiveGroup?"active":""}" data-tip="${esc(label)}" onclick="toggleSideGroup('${key}','${sub[0][0]}')">
-            <span class="ico">${MENU_ICONS[key]||"🕒"}</span><span class="lbl">${esc(label)}</span>
-            <span class="grp-arrow">▸</span>
-          </button>
-          <div class="subnav">
-            ${sub.map(s => `
-            <button class="${active===s[0]?"active":""}" style="padding-left:34px" data-tip="${esc(s[1])}" onclick="route('${s[0]}')">
-              <span class="ico">${MENU_ICONS[s[0]]||"•"}</span><span class="lbl">${esc(s[1])}</span><span class="dot"></span>
-            </button>`).join("")}
-          </div>
-        </div>
+        <button class="${isActiveGroup?"active":""}" data-tip="${esc(label)}" onclick="toggleSideGroup('${key}','${sub[0][0]}')">
+          <span class="ico">${MENU_ICONS[key]||"🕒"}</span><span class="lbl">${esc(label)}</span>
+          <span style="margin-left:auto;font-size:11px">${open?"▾":"▸"}</span>
+        </button>
+        ${open ? sub.map(s => `
+          <button class="${active===s[0]?"active":""}" style="padding-left:34px" data-tip="${esc(s[1])}" onclick="route('${s[0]}')">
+            <span class="ico">${MENU_ICONS[s[0]]||"•"}</span><span class="lbl">${esc(s[1])}</span><span class="dot"></span>
+          </button>`).join("") : ""}
       `;
     }
     return `<button class="${active===key?"active":""}" data-tip="${esc(label)}" onclick="route('${key}')"><span class="ico">${MENU_ICONS[key]||"•"}</span><span class="lbl">${esc(label)}</span>${key==="sop"&&admin?'<span class="badge o" id="sopNavBadge" style="display:none;margin-left:auto"></span>':'<span class="dot"></span>'}</button>`;
@@ -3245,7 +3241,8 @@ async function showCertificate(attemptId){
           </div>
         </div>
         <div class="actions" style="justify-content:center;margin-top:15px">
-          <button class="btn blue" onclick="printCertificate()">Print / Save PDF</button>
+          <button class="btn blue" onclick="downloadCertificatePDF('${a.id}')">⬇️ Download PDF</button>
+          <button class="btn light" onclick="printCertificate()">Print / Save PDF</button>
           <button class="btn light" onclick="maybeShowFeedback('${a.training_id}')">Close</button>
         </div>
       </div>
@@ -3287,7 +3284,8 @@ async function showDeclarationCertificate(trainingId){
           </div>
         </div>
         <div class="actions" style="justify-content:center;margin-top:15px">
-          <button class="btn blue" onclick="printCertificate()">Print / Save PDF</button>
+          <button class="btn blue" onclick="downloadDeclarationCertificatePDF('${trainingId}')">⬇️ Download PDF</button>
+          <button class="btn light" onclick="printCertificate()">Print / Save PDF</button>
           <button class="btn light" onclick="maybeShowFeedback('${trainingId}', true)">Close</button>
         </div>
       </div>
