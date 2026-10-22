@@ -214,6 +214,7 @@ async function start(){
     return loginPage("Your account is deactivated. Please contact Admin.");
   }
   profile = p.data;
+  if(profile.must_change_password === true) return forcePasswordChangePage();
   route("dash");
 }
 
@@ -1071,7 +1072,7 @@ function adminResetPassword(userId, userName) {
       <div class="modal" style="max-width:450px">
         <h2>Reset Password</h2>
         <p>Are you sure you want to reset password for <b>${esc(userName)}</b>?</p>
-        <p class="muted" style="font-size:13px;margin-top:8px">This will set the employee's password back to the default temporary password (<b>TSL@1234</b>). Current passwords are secure and cannot be viewed.</p>
+        <p class="muted" style="font-size:13px;margin-top:8px">This will set the employee's password back to the default temporary password (<b>Abc@1234</b>). Current passwords are secure and cannot be viewed.</p>
         <div class="actions" style="justify-content:flex-end;margin-top:16px">
           <button class="btn light" onclick="closeModal()">Cancel</button>
           <button class="btn blue" onclick="executeAdminResetPassword('${userId}')">Confirm Reset</button>
@@ -1092,7 +1093,7 @@ async function executeAdminResetPassword(userId) {
       "Authorization": "Bearer " + s.access_token,
       "apikey": window.SUPABASE_ANON_KEY
     },
-    body: JSON.stringify({ target_user_id: userId, reset_password: "TSL@1234" })
+    body: JSON.stringify({ target_user_id: userId, reset_password: "Abc@1234" })
   });
 
   let d = await r.json().catch(()=>({}));
@@ -1101,7 +1102,8 @@ async function executeAdminResetPassword(userId) {
   if(!r.ok && !d.success) {
     alert(d.error || d.message || "Failed to reset password via Admin API.");
   } else {
-    alert("Password reset successfully. Temporary password set to TSL@1234.");
+    try{ await sb.from("profiles").update({ must_change_password: true }).eq("id", userId); }catch(e){}
+    alert("Password reset successfully. Temporary password set to Abc@1234.");
   }
 }
 
@@ -1163,6 +1165,27 @@ async function executeChangeMyPassword() {
   alert("Password changed successfully!");
 }
 
+// --- FORCED PASSWORD CHANGE (first login / after admin reset) ---
+// Blocking page: no sidebar/topbar - the user cannot navigate until the password is changed.
+function forcePasswordChangePage(){
+  app.innerHTML = `<div class=login><div class=loginbox><h1>\u{1F6E1}\uFE0F Safety Training & Learning Portal</h1><p class=muted>Talwandi Sabo Thermal Plant</p><h2 style="margin:12px 0 4px">\u{1F511} Set Your Password</h2><p class=muted>You are using a temporary password. Please set a new password to continue.</p><label>New Password *</label><input id=forceNewPass type=password><label>Confirm New Password *</label><input id=forceConfirmPass type=password onkeydown="if(event.key==='Enter')executeForcePasswordChange()"><button class="btn blue full" onclick=executeForcePasswordChange()>Set Password & Continue</button></div></div>`;
+}
+
+async function executeForcePasswordChange(){
+  const newPass = $("forceNewPass")?.value;
+  const confirmPass = $("forceConfirmPass")?.value;
+  if(!newPass || !confirmPass) return alert("Both password fields are required.");
+  if(newPass !== confirmPass) return alert("New Password and Confirm Password do not match.");
+  if(newPass.length < 6) return alert("Password must be at least 6 characters long.");
+  if(newPass === "Abc@1234") return alert("Please choose a password different from the temporary password.");
+  const updateRes = await sb.auth.updateUser({ password: newPass });
+  if(updateRes.error) return alert("Password update failed: " + updateRes.error.message);
+  try{ await sb.from("profiles").update({ must_change_password: false }).eq("id", profile.id); }catch(e){}
+  profile.must_change_password = false;
+  alert("Password changed successfully!");
+  route("dash");
+}
+
 function addUserForm(){
   document.body.insertAdjacentHTML("beforeend",`
     <div class=modalbg id=modal>
@@ -1172,7 +1195,7 @@ function addUserForm(){
           <div><label>Employee ID *</label><input id=uid placeholder="e.g. EMP001"></div>
           <div><label>Name *</label><input id=un placeholder="Full Name"></div>
           <div><label>Email Address *</label><input id=ue type="email" placeholder="e.g. ravi.kumar@company.com"></div>
-          <div><label>Password *</label><input id=up type=password value="TSL@1234"></div>
+          <div><label>Password *</label><input id=up type=password value="Abc@1234"></div>
           <div><label>Department</label><input id=ud placeholder="Electrical"></div>
           <div><label>Designation</label><input id=udes placeholder="Engineer"></div>
           <div class=fullfield><label>Company</label><input id=uc value="Talwandi Sabo Thermal Plant"></div>
@@ -1251,6 +1274,7 @@ async function createUser(){
     return alert("Could not create user: " + formattedMsg);
   }
 
+  try{ await sb.from("profiles").update({ must_change_password: true }).eq("employee_id", empId); }catch(e){}
   closeModal();
   alert("User created successfully.");
   route("users");
@@ -1604,7 +1628,7 @@ async function executeExcelImport(){
             employee_id: empId,
             name: name,
             username: targetEmail,
-            password: "TSL@1234",
+            password: "Abc@1234",
             department: dept,
             designation: desig,
             company: comp,
@@ -1617,6 +1641,7 @@ async function executeExcelImport(){
         try { resData = JSON.parse(rawText); } catch(e) {}
 
         if(res.ok && resData.success){
+          try{ await sb.from("profiles").update({ must_change_password: true }).eq("employee_id", empId); }catch(e){}
           addedCount++;
           rowDetails.push(`Row ${rowNum} (${empId}): User created successfully.`);
         } else {
@@ -5284,6 +5309,7 @@ async function viewTrainerCertificate(path){
 async function route(x){
   if(!configured) return loginPage();
   if(!profile) return start();
+  if(profile.must_change_password === true) return forcePasswordChangePage();
   currentRoute = x;
   return ({dash, users, train:training, sop:sopPage, trainers:trainersPage, notes:notifications, results:assessmentResults, progress, reports, history, seclogs:securityLogsPage, feedback:feedbackPage, attendance:meetingAttendancePage, certificates:certificatesPage, mailintegration:mailIntegrationPage, meetintegration:meetIntegrationPage}[x] || dash)();
 }
