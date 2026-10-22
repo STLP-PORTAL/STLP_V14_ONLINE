@@ -124,7 +124,7 @@ function uploadFileWithProgress(bucket, path, file, onProgress){
 }
 
 function loginPage(msg=""){
-  app.innerHTML = `<div class=login><div class=loginbox><h1>🛡️ Safety Training & Learning Portal</h1><p class=muted>Talwandi Sabo Thermal Plant</p><label>Email / Employee ID</label><input id=email><label>Password</label><input id=password type=password onkeydown="if(event.key==='Enter')login()"><button class="btn blue full" onclick=login()>Login</button><p class=muted>${esc(msg)}</p></div></div>`;
+  app.innerHTML = `<div class=login><div class=loginbox><h1>🛡️ Skills, Training & Learning Portal</h1><p class=muted>Talwandi Sabo Thermal Plant</p><label>Email / Employee ID</label><input id=email><label>Password</label><input id=password type=password onkeydown="if(event.key==='Enter')login()"><button class="btn blue full" onclick=login()>Login</button><p class=muted>${esc(msg)}</p></div></div>`;
 }
 
 async function login(){
@@ -401,7 +401,7 @@ function layout(active, title, html){
     <div class="side-scrim" id="sideScrim" onclick="toggleMobileSidebar()"></div>
     <aside class="side${collapsed?" collapsed":""}" id="sideEl" style="${window._impersonation?"margin-top:40px":""}">
       <button class="side-toggle" onclick="toggleSidebar()" title="Collapse sidebar">${collapsed?"›":"‹"}</button>
-      <div class="brand"><span class="mark">🛡️</span><span class="txt">Safety Training &amp; Learning Portal<small>Talwandi Sabo Thermal Plant</small></span></div>
+      <div class="brand"><span class="mark">🛡️</span><span class="txt">Skills, Training &amp; Learning Portal<small>Talwandi Sabo Thermal Plant</small></span></div>
       ${renderSideMenu(menu, admin, active)}
       <div class="sidebar-foot"><button class="btn light full" onclick="logout()">🚪 <span class="lbl-logout">Logout</span></button></div>
     </aside>
@@ -1168,7 +1168,7 @@ async function executeChangeMyPassword() {
 // --- FORCED PASSWORD CHANGE (first login / after admin reset) ---
 // Blocking page: no sidebar/topbar - the user cannot navigate until the password is changed.
 function forcePasswordChangePage(){
-  app.innerHTML = `<div class=login><div class=loginbox><h1>\u{1F6E1}\uFE0F Safety Training & Learning Portal</h1><p class=muted>Talwandi Sabo Thermal Plant</p><h2 style="margin:12px 0 4px">\u{1F511} Set Your Password</h2><p class=muted>You are using a temporary password. Please set a new password to continue.</p><label>New Password *</label><input id=forceNewPass type=password><label>Confirm New Password *</label><input id=forceConfirmPass type=password onkeydown="if(event.key==='Enter')executeForcePasswordChange()"><button class="btn blue full" onclick=executeForcePasswordChange()>Set Password & Continue</button></div></div>`;
+  app.innerHTML = `<div class=login><div class=loginbox><h1>\u{1F6E1}\uFE0F Skills, Training & Learning Portal</h1><p class=muted>Talwandi Sabo Thermal Plant</p><h2 style="margin:12px 0 4px">\u{1F511} Set Your Password</h2><p class=muted>You are using a temporary password. Please set a new password to continue.</p><label>New Password *</label><input id=forceNewPass type=password><label>Confirm New Password *</label><input id=forceConfirmPass type=password onkeydown="if(event.key==='Enter')executeForcePasswordChange()"><button class="btn blue full" onclick=executeForcePasswordChange()>Set Password & Continue</button></div></div>`;
 }
 
 async function executeForcePasswordChange(){
