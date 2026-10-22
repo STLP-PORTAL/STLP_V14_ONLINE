@@ -5378,7 +5378,7 @@ async function sopPage(){
   layout("sop","Library",`
     <div class="actions" style="margin-bottom:14px;justify-content:space-between">
       <div class="muted">${admin ? "Review SOPs uploaded by users, then approve to publish them for everyone. Organize them into folders, hide, or delete as needed." : "Browse approved SOPs, or upload a new one for admin review."}</div>
-      <button class="btn blue" onclick="sopUploadForm()">+ Upload SOP</button>
+      <button class="btn blue" onclick="sopUploadForm()">+ Upload Document</button>
     </div>
     ${tabs}
     ${folderTabs}
@@ -5479,7 +5479,7 @@ async function deleteSop(id, filePath, title){
 function sopUploadForm(){
   document.body.insertAdjacentHTML("beforeend", `
     <div class="modalbg" id="modal"><div class="modal">
-      <h2>Upload SOP</h2>
+      <h2>Upload Document</h2>
       <label>Title *</label><input id="sopTitle" placeholder="e.g. Boiler Lockout-Tagout Procedure">
       <label>Description</label><textarea id="sopDesc" rows="3" placeholder="Optional notes about this SOP"></textarea>
       <label>File *</label><input id="sopFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png">
