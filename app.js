@@ -1180,7 +1180,7 @@ async function executeForcePasswordChange(){
   if(newPass === "Abc@1234") return alert("Please choose a password different from the temporary password.");
   const updateRes = await sb.auth.updateUser({ password: newPass });
   if(updateRes.error) return alert("Password update failed: " + updateRes.error.message);
-  try{ await sb.from("profiles").update({ must_change_password: false }).eq("id", profile.id); }catch(e){}
+  try{ await sb.rpc("clear_my_password_flag"); }catch(e){}
   profile.must_change_password = false;
   alert("Password changed successfully!");
   route("dash");
