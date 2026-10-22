@@ -341,6 +341,7 @@ let _sideGroupOpen = { _history_group: null, _settings_group: null }; // null = 
 function toggleSideGroup(groupKey, fallbackRoute){
   const cur = _sideGroupOpen[groupKey];
   _sideGroupOpen[groupKey] = (cur === null || cur === undefined) ? true : !cur;
+  _refreshSidebarNow(); // instant toggle: submenu at once khulda, page data pichhon aunda
   const stayOnCurrent = ["history","seclogs","mailintegration","meetintegration"].includes(currentRoute);
   route(stayOnCurrent ? currentRoute : fallbackRoute);
 }
@@ -348,7 +349,7 @@ function toggleSideGroup(groupKey, fallbackRoute){
 function toggleSideHistoryGroup(){ toggleSideGroup("_history_group", "history"); }
 
 function renderSideMenu(menu, admin, active){
-  return `<div class="nav">${menu.map(m => {
+  return `<div class="nav" id="sideNav">${menu.map(m => {
     const [key, label, sub] = m;
     if(sub){
       const isActiveGroup = sub.some(s => s[0] === active);
@@ -369,14 +370,23 @@ function renderSideMenu(menu, admin, active){
   }).join("")}</div>`;
 }
 
-function layout(active, title, html){
-  let admin = profile.role === "admin";
-  let menu = admin ?
+function _buildMenu(admin){
+  return admin ?
     [["dash","Dashboard"],["users","Users Management"],["train","Training"],["certificates","Certificates"],["sop","Library"],["trainers","Trainers"],["notes","Notifications"],["results","Results"],["progress","Progress"],["reports","Reports"],["attendance","Meeting Attendance"],
       ["_history_group","History",[["history","Audit Logs"],["seclogs","Security Logs"]]],
       ["feedback","Feedback"],
       ["_settings_group","Settings",[["mailintegration","Mail Integration"],["meetintegration","Meet Integration"]]]] :
     [["dash","Dashboard"],["train","My Trainings"],["certificates","My Certificates"],["sop","Library"],["notes","Notifications"],["results","Assessments"],["history","History"]];
+}
+function _refreshSidebarNow(){
+  const navEl = document.getElementById("sideNav");
+  if(!navEl || !profile) return;
+  const _adm = profile.role === "admin";
+  navEl.outerHTML = renderSideMenu(_buildMenu(_adm), _adm, currentRoute);
+}
+function layout(active, title, html){
+  let admin = profile.role === "admin";
+  let menu = _buildMenu(admin);
 
   const collapsed = _sidebarCollapsedPref();
   const initials = (profile.name||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
