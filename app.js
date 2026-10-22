@@ -340,7 +340,7 @@ function toggleMobileSidebar(){
 let _sideGroupOpen = { _history_group: null, _settings_group: null }; // null = auto (open if a sub-route of that group is active)
 function toggleSideGroup(groupKey, fallbackRoute){
   const cur = _sideGroupOpen[groupKey];
-  _sideGroupOpen[groupKey] = !(cur === null || cur === undefined ? true : cur);
+  _sideGroupOpen[groupKey] = (cur === null || cur === undefined) ? true : !cur;
   const stayOnCurrent = ["history","seclogs","mailintegration","meetintegration"].includes(currentRoute);
   route(stayOnCurrent ? currentRoute : fallbackRoute);
 }
