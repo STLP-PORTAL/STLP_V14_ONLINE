@@ -5311,8 +5311,11 @@ async function route(x){
   if(!profile) return start();
   if(profile.must_change_password === true) return forcePasswordChangePage();
   currentRoute = x;
+  try{ if(!history.state||history.state.route!==x) history.pushState({route:x},"","#"+x); }catch(e){}
   return ({dash, users, train:training, sop:sopPage, trainers:trainersPage, notes:notifications, results:assessmentResults, progress, reports, history, seclogs:securityLogsPage, feedback:feedbackPage, attendance:meetingAttendancePage, certificates:certificatesPage, mailintegration:mailIntegrationPage, meetintegration:meetIntegrationPage}[x] || dash)();
 }
+// Phone back button: go back inside the portal instead of exiting the app
+window.addEventListener("popstate",e=>{ const r=e.state&&e.state.route; if(r&&r!==currentRoute) route(r); });
 
 // --- SOP MODULE ---
 
